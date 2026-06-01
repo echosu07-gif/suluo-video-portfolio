@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人视频作品集</title>
+    <meta
+      name="description"
+      content="个人视频作品集单页网站，展示个人IP、科普类视频与动画&二次元作品。"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111111'/%3E%3Cpath d='M18 18h10l18 14v2L28 48H18V18zm10 10.7v8.6L37.8 32 28 28.7z' fill='%23f1c879'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+:root {
+  color-scheme: dark;
+  --bg: #111111;
+  --panel: rgba(24, 24, 24, 0.86);
+  --panel-strong: rgba(37, 33, 26, 0.92);
+  --line: rgba(242, 228, 201, 0.18);
+  --text: #f3ead8;
+  --muted: #c6baa4;
+  --accent: #d8b36a;
+  --accent-strong: #f1c879;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  --radius: 24px;
+  --radius-sm: 18px;
+  --max-width: 1240px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(185, 132, 46, 0.2), transparent 24%),
+    radial-gradient(circle at 85% 18%, rgba(157, 109, 34, 0.16), transparent 20%),
+    linear-gradient(180deg, #191816 0%, #111111 36%, #0b0b0b 100%);
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 90%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-shell {
+  width: min(calc(100% - 32px), var(--max-width));
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+.site-header,
+.site-footer,
+.hero,
+.works-section {
+  position: relative;
+  z-index: 1;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 0 36px;
+}
+
+.brand-mark {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2rem, 2.4vw, 2.8rem);
+  letter-spacing: 0.04em;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.header-nav a:hover,
+.header-nav a:focus-visible {
+  color: var(--text);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.72fr);
+  gap: 28px;
+  align-items: stretch;
+  padding: 32px 0 84px;
+}
+
+.hero-copy,
+.hero-panel,
+.works-section,
+.site-footer {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(28, 26, 23, 0.92), rgba(14, 14, 14, 0.88));
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hero-copy,
+.hero-panel,
+.site-footer {
+  border-radius: var(--radius);
+}
+
+.hero-copy {
+  padding: clamp(28px, 4vw, 56px);
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--accent-strong);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.hero h1,
+.section-heading h2,
+.site-footer h2 {
+  margin: 0;
+  line-height: 0.98;
+  font-weight: 600;
+}
+
+.hero h1 {
+  max-width: 8ch;
+  font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(2.9rem, 6.4vw, 5.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.section-heading h2,
+.site-footer h2 {
+  font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+  line-height: 1.08;
+}
+
+.hero-text,
+.section-heading p,
+.site-footer p,
+.work-description {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.hero-text {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-2px);
+}
+
+.button-primary {
+  color: #181410;
+  background: linear-gradient(135deg, #f1c879, #c9994d);
+}
+
+.button-secondary {
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hero-panel {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(63, 49, 29, 0.96), rgba(18, 18, 18, 0.94));
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 28px;
+  background:
+    linear-gradient(180deg, rgba(17, 17, 17, 0.36), rgba(17, 17, 17, 0.78)),
+    radial-gradient(circle at top right, rgba(255, 217, 153, 0.24), transparent 40%);
+}
+
+.hero-stat-value {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+}
+
+.hero-stat-label {
+  color: var(--muted);
+}
+
+.works-section {
+  border-radius: 32px;
+  padding: 34px 24px 28px;
+}
+
+.section-heading {
+  max-width: 720px;
+  padding: 6px 6px 24px;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 6px;
+}
+
+.filter-chip {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.filter-chip:hover,
+.filter-chip:focus-visible {
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.filter-chip.is-active {
+  color: #171310;
+  border-color: transparent;
+  background: linear-gradient(135deg, #f2cf92, #b98538);
+}
+
+.works-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 6px 10px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  padding: 8px 6px 6px;
+}
+
+.work-card {
+  grid-column: span 6;
+  min-width: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    opacity 180ms ease;
+}
+
+.work-card:hover,
+.work-card:focus-within {
+  transform: translateY(-6px);
+  border-color: rgba(241, 200, 121, 0.36);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.28);
+}
+
+.work-link {
+  display: block;
+  height: 100%;
+}
+
+.work-visual {
+  position: relative;
+  aspect-ratio: 1.12 / 0.8;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.work-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  filter: saturate(0.9) contrast(1.06) brightness(0.82);
+  pointer-events: none;
+}
+
+.work-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 11, 11, 0.06), rgba(11, 11, 11, 0.72)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 45%);
+}
+
+.work-badge,
+.work-placeholder {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.work-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: #171310;
+  font-size: 0.78rem;
+  background: rgba(242, 214, 160, 0.92);
+}
+
+.work-placeholder {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(255, 242, 220, 0.86);
+}
+
+.work-body {
+  padding: 18px 18px 22px;
+}
+
+.work-headline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.work-headline h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.work-category {
+  color: var(--accent-strong);
+  font-size: 0.84rem;
+}
+
+.work-description {
+  margin: 12px 0 0;
+  font-size: 0.94rem;
+}
+
+.site-footer {
+  margin-top: 24px;
+  padding: 28px;
+}
+
+.site-footer h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.contact-title {
+  font-size: 1.15rem;
+  font-family: "Manrope", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  margin-top: 20px;
+  color: var(--muted);
+}
+
+.video-modal[hidden] {
+  display: none;
+}
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.video-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6, 6, 6, 0.74), rgba(6, 6, 6, 0.92)),
+    radial-gradient(circle at top, rgba(196, 134, 41, 0.16), transparent 30%);
+  backdrop-filter: blur(12px);
+}
+
+.video-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1120px);
+  border: 1px solid rgba(242, 228, 201, 0.18);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(26, 24, 21, 0.98), rgba(10, 10, 10, 0.96));
+  box-shadow: 0 30px 120px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.video-dialog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 22px 0;
+}
+
+.video-dialog-title {
+  margin: 0;
+  font-family: "STSong", "Songti SC", "Noto Serif SC", serif;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  line-height: 1.15;
+}
+
+.video-close {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.video-close:hover,
+.video-close:focus-visible {
+  color: var(--text);
+  border-color: rgba(241, 200, 121, 0.36);
+}
+
+.video-frame {
+  padding: 20px;
+}
+
+.modal-video {
+  display: block;
+  width: 100%;
+  max-height: min(74vh, 760px);
+  border-radius: 20px;
+  background: #000;
+  outline: none;
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+  }
+
+  .work-card {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-shell {
+    width: min(calc(100% - 20px), var(--max-width));
+    padding-top: 18px;
+  }
+
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 24px;
+  }
+
+  .header-nav {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    padding-bottom: 56px;
+  }
+
+  .hero h1 {
+    max-width: 10ch;
+  }
+
+  .hero-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .works-section {
+    padding-inline: 14px;
+    border-radius: 24px;
+  }
+
+  .works-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .work-card {
+    grid-column: auto;
+  }
+
+  .site-footer {
+    padding: 24px 18px;
+  }
+
+  .video-modal {
+    padding: 14px;
+  }
+
+  .video-dialog-head {
+    align-items: center;
+    padding: 18px 18px 0;
+  }
+
+  .video-frame {
+    padding: 16px;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand-mark" href="#top" aria-label="返回首页">苏洛echo✂️</a>
+        <nav class="header-nav" aria-label="主导航">
+          <a href="#works">作品</a>
+          <a href="#about">简介</a>
+          <a href="#contact">联系</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero" id="about">
+          <div class="hero-copy">
+            <p class="eyebrow">PERSONAL VIDEO PORTFOLIO</p>
+            <p class="hero-text">
+              这里收录我的个人视频作品方向，覆盖个人IP、科普类视频与动画&二次元内容。
+              当前页面仅为部分案例展示。
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#works">查看作品</a>
+              <a class="button button-secondary" href="#contact">合作联系</a>
+            </div>
+          </div>
+          <aside class="hero-panel" aria-label="作品集概览">
+            <div class="hero-stat">
+              <span class="hero-stat-value">3</span>
+              <span class="hero-stat-label">内容分类</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">13</span>
+              <span class="hero-stat-label">当前视频作品</span>
+            </div>
+          </aside>
+        </section>
+
+        <section class="works-section" id="works">
+          <div class="section-heading">
+            <p class="eyebrow">SELECTED WORKS</p>
+            <p>
+              点击任意卡片即可打开对应视频文件。
+            </p>
+          </div>
+
+          <div class="filter-bar" aria-label="作品分类筛选">
+            <button class="filter-chip is-active" data-filter="全部" type="button">
+              全部
+            </button>
+            <button class="filter-chip" data-filter="个人IP" type="button">个人IP</button>
+            <button class="filter-chip" data-filter="科普类视频" type="button">科普类视频</button>
+            <button class="filter-chip" data-filter="动画&二次元" type="button">
+              动画&二次元
+            </button>
+          </div>
+
+          <div class="works-meta">
+            <p id="filter-label">当前查看：全部作品</p>
+            <p id="works-count">共 13 个视频作品</p>
+          </div>
+
+          <div class="works-grid" id="works-grid" aria-live="polite"></div>
+        </section>
+
+      </main>
+
+      <footer class="site-footer" id="contact">
+        <div>
+          <p class="eyebrow">CONTACT</p>
+          <h2 class="contact-title">还有更多可能与你共创，联系我哦～</h2>
+        </div>
+        <div class="footer-links">
+          <span>微信号：Mo542596374</span>
+        </div>
+      </footer>
+    </div>
+
+    <template id="work-card-template">
+      <article class="work-card">
+        <a class="work-link" href="#">
+          <div class="work-visual">
+            <video class="work-video" muted loop playsinline preload="metadata"></video>
+            <div class="work-overlay"></div>
+            <div class="work-badge"></div>
+            <p class="work-placeholder">点击打开视频</p>
+          </div>
+          <div class="work-body">
+            <div class="work-headline">
+              <h3></h3>
+              <span class="work-category"></span>
+            </div>
+            <p class="work-description"></p>
+          </div>
+        </a>
+      </article>
+    </template>
+
+    <div class="video-modal" id="video-modal" hidden>
+      <div class="video-backdrop" data-close-modal="true"></div>
+      <div
+        class="video-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="video-modal-title"
+      >
+        <div class="video-dialog-head">
+          <div>
+            <p class="eyebrow">VIDEO PLAYER</p>
+            <h2 id="video-modal-title" class="video-dialog-title"></h2>
+          </div>
+          <button class="video-close" id="video-close" type="button" aria-label="关闭视频">
+            关闭
+          </button>
+        </div>
+        <div class="video-frame">
+          <video
+            id="modal-video"
+            class="modal-video"
+            controls
+            playsinline
+            preload="metadata"
+          ></video>
+        </div>
+      </div>
+    </div>
+    <script>
+window.PORTFOLIO_CONFIG = { mediaBaseUrl: "" };
+const works = [
+  {
+    title: "房地产实拍类",
+    category: "个人IP",
+    description: "个人IP方向视频素材，适合突出真实场景、镜头质感和人物表达。",
+    storagePath: "个人IP/房地产实拍类.mp4",
+    featured: true,
+  },
+  {
+    title: "房地产实拍类 2",
+    category: "个人IP",
+    description: "同类题材的第二支素材，可用于补充个人风格与镜头语言的连续性。",
+    storagePath: "个人IP/房地产实拍类2.mp4",
+  },
+  {
+    title: "房地产对话类",
+    category: "个人IP",
+    description: "以人物对话为主的个人IP素材，适合展示交流感和叙事节奏。",
+    storagePath: "个人IP/房地产对话类.mp4",
+  },
+  {
+    title: "房地产剧情类",
+    category: "个人IP",
+    description: "剧情向个人IP素材，适合呈现故事推进和人物设定能力。",
+    storagePath: "个人IP/房地产剧情类.mp4",
+  },
+  {
+    title: "财经类 股票向",
+    category: "科普类视频",
+    description: "财经科普方向素材，适合放股票向内容展示信息拆解能力。",
+    storagePath: "科普类视频/财经类 股票向.mp4",
+    featured: true,
+  },
+  {
+    title: "财经类社会向",
+    category: "科普类视频",
+    description: "更偏社会议题与财经观察的科普视频素材。",
+    storagePath: "科普类视频/财经类社会向.mp4",
+  },
+  {
+    title: "留学科普类",
+    category: "科普类视频",
+    description: "留学主题科普内容，可展示结构化讲解和信息表达能力。",
+    storagePath: "科普类视频/留学科普类.mp4",
+  },
+  {
+    title: "EVA + 背景",
+    category: "动画&二次元",
+    description: "二次元方向素材，适合展示角色氛围和背景融合效果。",
+    storagePath: "动画&二次元/eva+背景.mp4",
+  },
+  {
+    title: "光遇5周年 调色",
+    category: "动画&二次元",
+    description: "偏调色和视觉氛围的动画向视频素材。",
+    storagePath: "动画&二次元/光遇5周年 调色.mp4",
+    featured: true,
+  },
+  {
+    title: "小猫进度条",
+    category: "动画&二次元",
+    description: "节奏轻快的动画创意素材，适合展示趣味感和小体量创作能力。",
+    storagePath: "动画&二次元/小猫进度条.mp4",
+  },
+  {
+    title: "彩条",
+    category: "动画&二次元",
+    description: "偏图形与视觉实验方向的动画素材。",
+    storagePath: "动画&二次元/彩条.mp4",
+  },
+  {
+    title: "欢呼小眼睛",
+    category: "动画&二次元",
+    description: "更偏可爱风格与表情演出的动画小作品。",
+    storagePath: "动画&二次元/欢呼小眼睛.mp4",
+  },
+  {
+    title: "沈星回应援视频",
+    category: "动画&二次元",
+    description: "适合展示二创表达、应援氛围和情绪节奏控制。",
+    storagePath: "动画&二次元/沈星回应援视频.mp4",
+  },
+];
+
+const mediaConfig = window.PORTFOLIO_CONFIG || {};
+const localHosts = new Set(["", "localhost", "127.0.0.1"]);
+const remoteMediaBaseUrl = mediaConfig.mediaBaseUrl || "";
+const useRemoteMedia =
+  Boolean(remoteMediaBaseUrl) && !localHosts.has(window.location.hostname);
+
+function resolveMediaUrl(storagePath) {
+  if (useRemoteMedia) {
+    return new URL(storagePath, remoteMediaBaseUrl).toString();
+  }
+
+  return `./${storagePath}`;
+}
+
+const worksGrid = document.querySelector("#works-grid");
+const worksCount = document.querySelector("#works-count");
+const filterLabel = document.querySelector("#filter-label");
+const filterChips = document.querySelectorAll(".filter-chip");
+const workCardTemplate = document.querySelector("#work-card-template");
+const videoModal = document.querySelector("#video-modal");
+const modalVideo = document.querySelector("#modal-video");
+const modalTitle = document.querySelector("#video-modal-title");
+const closeButton = document.querySelector("#video-close");
+let lastFocusedTrigger = null;
+
+function openVideoModal(work, trigger) {
+  lastFocusedTrigger = trigger;
+  modalTitle.textContent = work.title;
+  modalVideo.src = resolveMediaUrl(work.storagePath);
+  videoModal.hidden = false;
+  document.body.classList.add("modal-open");
+  modalVideo.play().catch(() => {});
+}
+
+function closeVideoModal() {
+  videoModal.hidden = true;
+  document.body.classList.remove("modal-open");
+  modalVideo.pause();
+  modalVideo.removeAttribute("src");
+  modalVideo.load();
+
+  if (lastFocusedTrigger) {
+    lastFocusedTrigger.focus();
+  }
+}
+
+function getVisibleWorks(category) {
+  if (category === "全部") {
+    return works;
+  }
+
+  return works.filter((work) => work.category === category);
+}
+
+function renderWorks(category = "全部") {
+  const visibleWorks = getVisibleWorks(category);
+  worksGrid.innerHTML = "";
+
+  visibleWorks.forEach((work) => {
+    const fragment = workCardTemplate.content.cloneNode(true);
+    const card = fragment.querySelector(".work-card");
+    const link = fragment.querySelector(".work-link");
+    const visual = fragment.querySelector(".work-visual");
+    const video = fragment.querySelector(".work-video");
+    const badge = fragment.querySelector(".work-badge");
+    const title = fragment.querySelector("h3");
+    const categoryNode = fragment.querySelector(".work-category");
+    const description = fragment.querySelector(".work-description");
+
+    const mediaUrl = resolveMediaUrl(work.storagePath);
+
+    link.href = mediaUrl;
+    link.setAttribute(
+      "aria-label",
+      `${work.title}，分类 ${work.category}，点击打开视频`
+    );
+    visual.style.backgroundImage =
+      "linear-gradient(135deg, rgba(243, 214, 161, 0.16), rgba(17, 17, 17, 0.78)), linear-gradient(135deg, #1a1a1a, #403022 52%, #111111)";
+    video.src = mediaUrl;
+    video.setAttribute("aria-label", `${work.title} 预览视频`);
+    video.autoplay = true;
+    badge.textContent = "视频作品";
+    title.textContent = work.title;
+    categoryNode.textContent = work.category;
+    description.textContent = work.description;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openVideoModal(work, link);
+    });
+
+    worksGrid.appendChild(fragment);
+  });
+
+  filterLabel.textContent = `当前查看：${category === "全部" ? "全部作品" : category}`;
+  worksCount.textContent = `共 ${visibleWorks.length} 个视频作品`;
+}
+
+filterChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    filterChips.forEach((item) => item.classList.remove("is-active"));
+    chip.classList.add("is-active");
+    renderWorks(chip.dataset.filter);
+  });
+});
+
+videoModal.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLElement && event.target.dataset.closeModal === "true") {
+    closeVideoModal();
+  }
+});
+
+closeButton.addEventListener("click", closeVideoModal);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !videoModal.hidden) {
+    closeVideoModal();
+  }
+});
+
+renderWorks();
+
+    </script>
+  </body>
+</html>
