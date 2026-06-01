@@ -816,7 +816,8 @@ const mediaConfig = window.PORTFOLIO_CONFIG || {};
 const localHosts = new Set(["", "localhost", "127.0.0.1"]);
 const remoteMediaBaseUrl = mediaConfig.mediaBaseUrl || "";
 const useRemoteMedia =
-  Boolean(remoteMediaBaseUrl) && !localHosts.has(window.location.hostname);
+  /^https?:\/\//i.test(remoteMediaBaseUrl) &&
+  !localHosts.has(window.location.hostname);
 
 function resolveMediaUrl(storagePath) {
   if (useRemoteMedia) {
